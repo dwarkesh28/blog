@@ -19,9 +19,12 @@
 
 ```
 
-**CLI commands**
-help
+**Usefull CLI commands**
 
 ```
 go run main.go help
+go run main.go migrate
+go run main.go seed
+go run main.go serve
+
 ```
