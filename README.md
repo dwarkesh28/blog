@@ -1,16 +1,27 @@
 # blog
-config.yml file need to add as shown below
 
-app:
-  name: ""
+**config.yml file need to add as shown below**
 
-server:
-  host: ""
-  port: ""
+```
+  app:
+    name: ""
 
-db:
-  username: ""
-  password: ""
-  host: ""
-  port: ""
-  name: ""
+  server:
+    host: ""
+    port: ""
+
+  db:
+    username: ""
+    password: ""
+    host: ""
+    port: ""
+    name: ""
+
+```
+
+**CLI commands**
+help
+
+```
+go run main.go help
+```
