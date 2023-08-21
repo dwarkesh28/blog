@@ -10,7 +10,9 @@ import (
 	"blog/pkg/old"
 	"blog/pkg/sessions"
 	"fmt"
+	"log"
 	"net/http"
+	"os"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -72,9 +74,19 @@ func (controller *Controllers) Create(ctx *gin.Context) {
 }
 
 func (controller *Controllers) Store(ctx *gin.Context) {
+	file, err := ctx.FormFile("image")
+
+	if err != nil {
+		log.Fatal("failed to upload image")
+		ctx.Redirect(http.StatusFound, "/")
+		return
+	}
+
 	var request articles.StoreRequest
 	// This will infer what binder to use depending on the content-type header.
 	if err := ctx.ShouldBind(&request); err != nil {
+
+		log.Print("can not bind")
 		errors.Init()
 		errors.SetFromErrors(err)
 		sessions.Set(ctx, "errors", converters.MapToString(errors.Get()))
@@ -87,10 +99,33 @@ func (controller *Controllers) Store(ctx *gin.Context) {
 		return
 	}
 	user := helpers.Auth(ctx)
+	// fullFolderPath := fmt.Sprintf("./assets/img/users/%s/", user.Name)
+	pathForDatabase := fmt.Sprintf("/assets/img/users/%s/", user.Name)
 
-	article, err := controller.articleService.StoreAsUser(request, user)
+	// log.Print(fullFolderPath)
+
+	// folderPath := fmt.Sprintf("user/%s/%s", user.Name, file.Filename)
+
+	if _, err := os.Stat("./" + pathForDatabase); os.IsNotExist(err) {
+		// Folder doesn't exist, so create it
+		err := os.MkdirAll("./"+pathForDatabase, os.ModePerm)
+		if err != nil {
+			fmt.Println("Error creating folder:", err)
+		}
+	}
+	err = ctx.SaveUploadedFile(file, "./"+pathForDatabase+file.Filename)
 
 	if err != nil {
+		log.Print("can not upload image", err)
+		return
+	}
+
+	// log.Print(request.Image)cls
+
+	article, err := controller.articleService.StoreAsUser(request, user, pathForDatabase+file.Filename)
+
+	if err != nil {
+		log.Fatal("can not store article")
 		ctx.Redirect(http.StatusFound, "/articles/create")
 		return
 	}

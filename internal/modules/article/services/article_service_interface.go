@@ -10,5 +10,5 @@ type ArticleServiceInterface interface {
 	GetFeaturedArticle() ArticleResponse.Articles
 	GetStoriesArticle() ArticleResponse.Articles
 	Find(id int) (ArticleResponse.Article, error)
-	StoreAsUser(request articles.StoreRequest, user responses.User) (ArticleResponse.Article, error)
+	StoreAsUser(request articles.StoreRequest, user responses.User, folderPath string) (ArticleResponse.Article, error)
 }

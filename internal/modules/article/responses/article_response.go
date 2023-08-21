@@ -24,7 +24,7 @@ func ToArticle(article articleModel.Article) Article {
 		ID:        article.ID,
 		Title:     article.Title,
 		Content:   article.Content,
-		Image:     "/assets/img/demopic/10.jpg",
+		Image:     article.Image,
 		CreatedAt: fmt.Sprintf("%d/%02d/%02d", article.CreatedAt.Year(), article.CreatedAt.Month(), article.CreatedAt.Day()),
 		User:      userResponse.ToUser(article.User),
 	}

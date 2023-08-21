@@ -15,5 +15,6 @@ func GetRouter() *gin.Engine {
 }
 
 func RegisterRoutes() {
+
 	routes.RegisterRoutes(GetRouter())
 }

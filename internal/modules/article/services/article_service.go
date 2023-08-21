@@ -41,13 +41,14 @@ func (articleService *ArticleService) Find(id int) (ArticleResponse.Article, err
 	return ArticleResponse.ToArticle(article), nil
 }
 
-func (articleService *ArticleService) StoreAsUser(request articles.StoreRequest, user responses.User) (ArticleResponse.Article, error) {
+func (articleService *ArticleService) StoreAsUser(request articles.StoreRequest, user responses.User, folderPath string) (ArticleResponse.Article, error) {
 	var article articleModel.Article
 	var response ArticleResponse.Article
 
 	article.Title = request.Title
 	article.Content = request.Content
 	article.UserID = user.ID
+	article.Image = folderPath
 
 	newArticle := articleService.articleRepository.Create(article)
 
